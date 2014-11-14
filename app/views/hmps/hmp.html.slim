@@ -1,0 +1,48 @@
+= javascript_include_tag "highcharts", "chartkick", "http://code.highcharts.com/highcharts-more.js"
+.row.well
+  form.form.form_inline action="#{ hmp_path }"
+    label
+      ="Кількість урн:"
+    input type="text" name="count_hidden" style="width: 40px;" value="#{@count_hidden}"
+    label
+      ="Кількість станів:"
+    input type="text" name="count_conditions" style="width: 40px;" value="#{@count_conditions}"
+    label
+      ="Кількість значень:"
+    input type="text" name="count_values" style="width: 40px;" value="#{@count_values}"
+    input.btn.btn-primary type="submit" value="Змоделювати"
+.row#data
+  = "#{@hmp.series.to_json}"
+.row
+  #container
+
+javascript:
+  $(function () {
+    var series = $.parseJSON($("#data").text());
+    console.log(series);
+
+    $('#container').highcharts({
+
+        chart: {
+            type: 'bubble',
+            plotBorderWidth: 1,
+            zoomType: 'xy'
+        },
+
+        title: {
+            text: 'HMP'
+        },
+
+        xAxis: {
+            gridLineWidth: 1
+        },
+
+        yAxis: {
+            startOnTick: false,
+            endOnTick: false
+        },
+
+        series: series
+
+    });
+  });

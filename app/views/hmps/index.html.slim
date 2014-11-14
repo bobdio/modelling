@@ -1,0 +1,19 @@
+= javascript_include_tag "highcharts", "chartkick"
+.row.well
+  form.form.form_inline action="#{ hmps_path }"
+    label
+      ="Кількість станів:"
+    input type="text" name="count_conditions" style="width: 40px;" value="#{@count_conditions}"
+    label
+      ="Кількість значень:"
+    input type="text" name="count_values" style="width: 40px;" value="#{@count_values}"
+    input.btn.btn-primary type="submit" value="Змоделювати"
+.row
+  = line_chart [{name: "HMP", data: @chain.res}]
+.row
+  table.table.table-bordered.table-hover
+    - @chain.matrix.each do |row|
+      tr
+        - row.each do |e|
+          td
+            = e
