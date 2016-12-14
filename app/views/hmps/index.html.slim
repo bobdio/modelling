@@ -1,12 +1,14 @@
 = javascript_include_tag "highcharts", "chartkick"
 .row.well
-  form.form.form_inline action="#{ hmps_path }"
-    label
-      ="Кількість станів:"
-    input type="text" name="count_conditions" style="width: 40px;" value="#{@count_conditions}"
-    label
-      ="Кількість значень:"
-    input type="text" name="count_values" style="width: 40px;" value="#{@count_values}"
+  form.form-inline action="#{ hmps_path }"
+    .form-group
+      label for="count_conditions"
+        ="Кількість станів:"
+      = text_field_tag :count_conditions, @count_conditions, class: "form-control"
+    .form-group
+      label for="count_values"
+        ="Кількість значень:"
+      = text_field_tag :count_values, @ccount_values, class: "form-control"
     input.btn.btn-primary type="submit" value="Змоделювати"
 .row
   = line_chart [{name: "HMP", data: @chain.res}]

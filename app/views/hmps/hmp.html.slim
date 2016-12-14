@@ -1,16 +1,20 @@
 = javascript_include_tag "chartkick"
 .row.well
-  form.form.form_inline action="#{ hmp_path }"
-    label
-      ="Кількість урн:"
-    input type="text" name="count_hidden" style="width: 40px;" value="#{@count_hidden}"
-    label
-      ="Кількість станів:"
-    input type="text" name="count_conditions" style="width: 40px;" value="#{@count_conditions}"
-    label
-      ="Кількість значень:"
-    input type="text" name="count_values" style="width: 40px;" value="#{@count_values}"
-    input.btn.btn-primary type="submit" value="Змоделювати"
+  .col-md-12
+    form.form.form-inline action="#{ hmp_path }"
+      .form-group
+        label for="count_hidden"
+          ="Кількість урн:"
+        = text_field_tag :count_hidden, @count_hidden , class: "form-control"
+      .form-group
+        label for="count_conditions"
+          ="Кількість станів:"
+        = text_field_tag :count_conditions, @count_conditions , class: "form-control"
+      .form-group
+        label for="count_values"
+          ="Кількість значень:"
+        = text_field_tag :count_values, @count_values , class: "form-control"
+      input.btn.btn-primary type="submit" value="Змоделювати"
 .row#data
   = "#{@hmp.series.to_json}"
 .row
