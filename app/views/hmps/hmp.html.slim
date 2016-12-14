@@ -1,7 +1,7 @@
 = javascript_include_tag "chartkick"
 .row.well
   .col-md-12
-    form.form.form-inline action="#{ hmp_path }"
+    form.hmm-form.form-inline action="#{ hmp_path }"
       .form-group
         label for="count_hidden"
           ="Кількість урн:"
@@ -14,7 +14,7 @@
         label for="count_values"
           ="Кількість значень:"
         = text_field_tag :count_values, @count_values , class: "form-control"
-      input.btn.btn-primary type="submit" value="Змоделювати"
+      input.btn.btn-primary type="submit" value="Модель"
 .row#data
   = "#{@hmp.series.to_json}"
 .row
