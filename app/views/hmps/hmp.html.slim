@@ -20,6 +20,18 @@
 .row
   #container
 
+.row
+row
+  .col-md-12
+    -@hmp.models[0..@count_hidden-1].each_with_index do |chain, i|
+      table.table.table-bordered.table-hover
+        caption
+          = "Matrix ##{i}"
+        - chain.matrix.each do |row|
+          tr
+            - row.each do |e|
+              td
+                = e
 javascript:
   $(function () {
     var series = $.parseJSON($("#data").text());

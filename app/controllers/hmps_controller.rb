@@ -11,6 +11,7 @@ class HmpsController < ApplicationController
     @hmp = Hmp.new(@count_hidden, @count_conditions)
     @hmp.build(@count_values)
     @hmp.create_series
+    # binding.pry
     # @data = @hmp.series.to_json
   end
 
