@@ -1,11 +1,17 @@
 class MarkovChain
   attr_accessor :num_conditions
-  attr_reader :matrix, :res
+  attr_reader :matrix, :res, :p
   def initialize(num_conditions, first_condition = 0)
     @num_conditions = num_conditions
     @first_condition = first_condition
     @res = {}
+
+    initialize_initial_distribution
     create_matrix
+  end
+
+  def initialize_initial_distribution
+    @p = (1..@num_conditions).to_a.map{|e|  e = 1 / @num_conditions.to_f}
   end
 
   def create_matrix
@@ -16,7 +22,7 @@ class MarkovChain
         @matrix << tmp.map{|e| (e.to_f / (tmp.inject :+)).round(2) }
       end
     else
-      puts "Задайте число станів біьше за нуль!!!"
+      puts "Задайте число станів більше за нуль!!!"
     end
   end
 
