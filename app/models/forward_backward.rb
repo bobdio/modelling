@@ -1,9 +1,8 @@
 class ForwardBackward
   attr_accessor :hmm, :alpha, :beta
 
-  def initialize
-    @hmm = Hmm.new(4,3)
-    @hmm.build(5)
+  def initialize(model=nil)
+    @hmm = model || Hmm.new(4,3).build(5)
   end
 
   def forward
