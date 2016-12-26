@@ -40,7 +40,6 @@ class Viterby
       end
     end
 
-
     @q = []
     num_events = hmm_events.size
 

@@ -1,8 +1,10 @@
-class ViterbyController < ApplicationController
+class BaumWelchController < ApplicationController
 
   before_filter :set_params, only: [:index, :hmp]
 
   def index
+    # @chain = MarkovChain.new(@count_conditions)
+    # @chain.chain(@count_values)
   end
 
   def calculate
@@ -32,19 +34,20 @@ class ViterbyController < ApplicationController
 
     model = Hmm.new(@count_hidden,@observations.size,chain, @emissions)
 
-    viterby = Viterby.new model
-
-    viterby.hmm.result = params[:real_observations].strip.split(' ').map do |value|
+    model.result = params[:real_observations].strip.split(' ').map do |value|
       {
         value: value
       }
     end
 
-    viterby.get
+    bw = BaumWelch.new model
 
-    binding.pry
+    bw.estimate
 
-    render json: { q: viterby.q }
+    render json: {
+      p_new: bw.p_new,
+      a_new: bw.a_new
+    }
   end
 
   private

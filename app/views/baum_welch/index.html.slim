@@ -1,9 +1,9 @@
 .row.well
   .col-md-12
-    form.viterby-form.form-horizontal action="#{ hmp_path }"
+    form.fb-form.form-horizontal action="#{ hmp_path }"
       fieldset
         legend
-          = 'Алгортм Вітербі'
+          = 'Алгортм Баума-Велша'
         .form-group
           label for="count_hidden" class="col-sm-3"
             ="Введіть кільсть прихованих станів:"
@@ -31,7 +31,7 @@
         br
         input.btn.btn-primary.hidden id="next-btn" type="button" value="Обчислити"
         br
-        .row#result.text-center
+        .row#result-bw.text-center
 
 .row
   #container
@@ -94,6 +94,8 @@
           real_observation_html += '<input type="text" class="form-control" name="real_observations">';
           $('#real-observation').html(real_observation_html);
 
+
+
           return false;
         });
 
@@ -104,24 +106,41 @@
             var data = $('.fb-form').serialize();
             $.ajax({
               type: "POST",
-              url: '/viterby/calculate',
+              url: '/baum_welch/calculate',
               data: data,
               dataType: 'json',
               success: function (response) {
-                debugger;
-                if (response.q) {
-                  var res_html = 'Послідовність прихованих станів:';
+                if (response.p_new && response.a_new) {
+                  var res_html = 'Результат:</br>';
+                  res_html += '<p>Початковий розподіл:</p>';
+
                   res_html += '<table class="table table-striped">';
 
                   res_html += '<tr>';
-                  for (var j = 0; j < response.q.length; j++){
-                    res_html += '<td>' + response.q[j] + '</td>';
+                  for (var j = 0; j < response.p_new.length; j++) {
+                    res_html += '<td>' + response.p_new[j] + '</td>';
                   }
                   res_html += '</tr>';
 
+                  res_html += '</table>';
+
+                  res_html += '<p>Матриця переходів:</p>';
+
+                  res_html += '<table class="table table-striped">';
+
+                  for (var i = 0; i < response.a_new.length; i++) {
+                    res_html += '<tr>';
+                    for (var j = 0; j < response.a_new[i].length; j++){
+                      res_html += '<td>' + response.a_new[i][j] + '</td>';
+                    }
+                    res_html += '</tr>';
+
+
+                  }
+
                   res_html += '<table>';
 
-                  $('#result').html(res_html);
+                  $('#result-bw').html(res_html);
                 }
 
               }

@@ -9,12 +9,13 @@
             ="Введіть кільсть прихованих станів:"
           .col-sm-8
             = text_field_tag :count_hidden, @count_hidden , class: "form-control init-input"
-            input.btn.btn-primary id="reload-btn" type="button" value="Ввести дані"
         .form-group
           label for="count_observation" class="col-sm-3"
             = "Введіть можливі спостереження:"
           .col-sm-8
             = text_field_tag :observations, @observations, class: "form-control"
+        .form-group
+          input.btn.btn-primary id="reload-btn" type="button" value="Ввести дані"
         br
           .row
             #init-distribution.col-md-12.matrix-table

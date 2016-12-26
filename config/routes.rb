@@ -67,6 +67,12 @@ Modelling::Application.routes.draw do
     end
   end
 
+  resources :baum_welch, only: :index do
+    collection do
+      post :calculate
+    end
+  end
+
   get '/hmp' => 'hmps#hmp'
   root 'hmps#index'
 

@@ -1,9 +1,8 @@
 class BaumWelch
   attr_accessor :hmm, :fb, :gamma, :ksi, :p_new, :a_new, :b_new
 
-  def initialize
-    @hmm = Hmm.new(4,7)
-    @hmm.build(15)
+  def initialize(model)
+    @hmm = model
 
     initialize_forward_backward
     calculate_gamma
