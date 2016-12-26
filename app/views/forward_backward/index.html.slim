@@ -1,0 +1,142 @@
+.row.well
+  .col-md-12
+    form.fb-form.form-horizontal action="#{ hmp_path }"
+      .form-group
+        label for="count_hidden" class="col-sm-3"
+          ="Введіть кільсть прихованих станів:"
+        .col-sm-8
+          = text_field_tag :count_hidden, @count_hidden , class: "form-control init-input"
+          input.btn.btn-primary id="reload-btn" type="button" value="Ввести дані"
+      .form-group
+        label for="count_observation" class="col-sm-3"
+          = "Введіть можливі спостереження:"
+        .col-sm-8
+          = text_field_tag :observations, @observations, class: "form-control"
+      br
+        .row
+          #init-distribution.col-md-12.matrix-table
+      br
+      .row
+        #matrix.col-md-12.matrix-table
+      br
+      .row
+        #emissions-matrix.col-md-12.matrix-table
+      br
+      .row
+        #real-observation.col-md-12
+      br
+      input.btn.btn-primary.hidden id="next-btn" type="button" value="Обчислити"
+      br
+      .row#result.text-center
+
+.row
+  #container
+
+  javascript:
+    $(function () {
+      $(document).off('click', '#reload-btn')
+        .on('click', '#reload-btn', function () {
+          var count_hidden = $('#count_hidden').val();
+
+          var init_distribution_html = '<p>Задайте початковий розподіл:</p>';
+          init_distribution_html += '<table>';
+          init_distribution_html += '<tr>';
+          for (var j = 0; j < count_hidden; j++) {
+            init_distribution_html += '<td><input type="text" class="form-control" name="init_distribution[' + j + ']"></td>';
+          }
+          init_distribution_html += '<tr></table>';
+          $('#init-distribution').html(init_distribution_html);
+
+          var matrix_html = '<p>Задайте матрицю перехідних ймовірностей:</p>';
+          matrix_html += '<table>';
+          for (var i = 0; i < count_hidden; i++) {
+            matrix_html += '<tr>';
+            for (var j = 0; j < count_hidden; j++) {
+              matrix_html += '<td><input type="text" class="form-control" name="matrix[' + i + '][' + j + ']"></td>';
+            }
+            matrix_html += '</tr>';
+          }
+          matrix_html += '</table>';
+          $('#matrix').html(matrix_html);
+
+          var observations = $('#observations').val().trim().split(' ');
+
+          if (observations.length) {
+            var emissions_html = '<p>Задайте матрицю емісій:</p>';
+            emissions_html += '<table>';
+            emissions_html += '<tr>';
+            for (var j = 0; j < observations.length; j++) {
+              emissions_html += '<th>' + observations[j] + '</th>';
+            }
+            emissions_html += '<tr>';
+
+            for (var i = 0; i < count_hidden; i++) {
+              emissions_html += '<tr>';
+              for (var j = 0; j < observations.length; j++) {
+                emissions_html += '<td><input type="text" class="form-control" name="emissions[' + i + '][' + j + ']"></td>';
+              }
+              emissions_html += '</tr>';
+            }
+
+            emissions_html += '</table>';
+
+            $('#emissions-matrix').html(emissions_html);
+
+
+            $('#next-btn').removeClass('hidden');
+          }
+
+          var real_observation_html = '<p>Введіть спостережувану послідовність:</p>';
+          real_observation_html += '<input type="text" class="form-control" name="real_observations">';
+          $('#real-observation').html(real_observation_html);
+
+
+
+          return false;
+        });
+
+      $(document).off('click', '#next-btn')
+        .on('click', '#next-btn', function() {
+
+          if ($('#emissions-matrix').html()) {
+            var data = $('.fb-form').serialize();
+            $.ajax({
+              type: "POST",
+              url: '/forward_backward/calculate',
+              data: data,
+              dataType: 'json',
+              success: function (response) {
+                debugger;
+                if (response.alpha) {
+                  var res = 0.0;
+                  var res_html = 'Результат:';
+                  res_html += '<table class="table table-striped">';
+
+                  for (var i = 0; i < response.alpha.length; i++) {
+                    res_html += '<tr>';
+                    for (var j = 0; j < response.alpha[i].length; j++){
+                      res_html += '<td>' + response.alpha[i][j] + '</td>';
+                      if (i == response.alpha.length-1) {
+                        res += response.alpha[i][j];
+                      }
+                    }
+                    res_html += '</tr>';
+
+
+                  }
+
+                  res_html += '<tr><td colspan="'+response.alpha[i-1].length+'">'+res+'</td></tr>';
+
+                  res_html += '<table>';
+
+                  $('#result').html(res_html);
+                }
+
+              }
+            });
+          }
+
+           return false;
+        });
+
+    });

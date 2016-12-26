@@ -1,0 +1,22 @@
+.fb-form {
+  input.init-input {
+    width: 60px;
+    //margin-left: 10px;
+  }
+  .matrix-table {
+    th {
+      text-align: center;
+    }
+    input {
+      width: 60px;
+    }
+  }
+
+  #result {
+    table {
+      tr:last-child {
+        font-weight: bold;
+      }
+    }
+  }
+}

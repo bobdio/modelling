@@ -1,11 +1,11 @@
 class Hmm
   attr_accessor :markov_condition, :num_events, :model, :emissions, :result, :series, :total
-  def initialize(num_markov_conditions = 3, num_events = 5)
+  def initialize(num_markov_conditions = 3, num_events = 5, initial_model = nil, emission_matrix = nil)
     @markov_condition = num_markov_conditions
     @num_events = num_events
-    @model = MarkovChain.new(@markov_condition)
+    @model = initial_model || MarkovChain.new(@markov_condition)
 
-    initialize_emission_matrix
+    @emissions = emission_matrix || initialize_emission_matrix
   end
 
   def initialize_emission_matrix
@@ -30,6 +30,8 @@ class Hmm
 
       @emissions << e
     end
+
+    @emisions
   end
 
   def build(total = 10)

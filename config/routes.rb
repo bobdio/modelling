@@ -55,6 +55,12 @@ Modelling::Application.routes.draw do
   #   end
   resources :hmps, only: :index
 
+  resources :forward_backward, only: :index do
+    collection do
+      post :calculate
+    end
+  end
+
   get '/hmp' => 'hmps#hmp'
   root 'hmps#index'
 

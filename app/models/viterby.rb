@@ -29,7 +29,6 @@ class Viterby
       end
     end
 
-
     last_row = @delta.last
 
     max = last_row[0]
@@ -46,7 +45,7 @@ class Viterby
     num_events = hmm_events.size
 
     hmm_events.each{|_e| @q << -1 }
-    
+
     @q[num_events-1] = i_max
 
     i = num_events - 2
