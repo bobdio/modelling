@@ -13,6 +13,7 @@ class BaumWelch
     @p_new = @gamma[0]
 
     @a_new = calculate_a
+    @b_new = calculate_b
 
   rescue => e
     binding.pry
@@ -24,10 +25,31 @@ class BaumWelch
     @hmm.model.matrix.each_with_index do |row, i|
       a[i] = []
       row.each_with_index do |_e, j|
-        a[i][j] = sum_ksi(i,j) / sum_gamma(i)
+        # binding.pry
+        a[i][j] = sum_ksi(i,j) / sum_gamma(i, @gamma.size-1)
       end
     end
     a
+  end
+
+  def calculate_b
+    a = []
+    @hmm.emissions.each_with_index do |row, i|
+      a[i] = []
+      row.each_with_index do |_e, j|
+        a[i][j] = sum_delta(i,j) / sum_gamma(i)
+      end
+    end
+    a
+  end
+
+  def sum_delta(k,i)
+    sum = 0.0
+    @gamma.each_with_index do |row, _index|
+      sum += row[i] * (@fb.hmm_events[k] == @fb.hmm_events[i] ? 1 : 0)
+    end
+
+    sum
   end
 
   def sum_ksi(i,j)
@@ -39,16 +61,14 @@ class BaumWelch
     sum
   end
 
-  def sum_gamma(i)
+  def sum_gamma(i, num=@gamma.size)
     sum = 0.0
-    @gamma.each_with_index do |row, _index|
+    @gamma.take(num).each_with_index do |row, _index|
       sum += row[i]
     end
 
     sum
   end
-
-
 
   def initialize_forward_backward
     @fb = ForwardBackward.new @hmm

@@ -51,7 +51,7 @@
           init_distribution_html += '<tr></table>';
           $('#init-distribution').html(init_distribution_html);
 
-          var matrix_html = '<p>Задайте матрицю перехідних ймовірностей:</p>';
+          var matrix_html = '<p>Задайте початкові значення матриці перехідних ймовірностей:</p>';
           matrix_html += '<table>';
           for (var i = 0; i < count_hidden; i++) {
             matrix_html += '<tr>';
@@ -66,7 +66,7 @@
           var observations = $('#observations').val().trim().split(' ');
 
           if (observations.length) {
-            var emissions_html = '<p>Задайте матрицю емісій:</p>';
+            var emissions_html = '<p>Задайте початкові значення матриці емісій:</p>';
             emissions_html += '<table>';
             emissions_html += '<tr>';
             for (var j = 0; j < observations.length; j++) {
@@ -137,8 +137,23 @@
 
 
                   }
-
                   res_html += '<table>';
+
+                  res_html += '<p>Матриця емісій:</p>';
+
+                  res_html += '<table class="table table-striped">';
+
+                  for (var i = 0; i < response.b_new.length; i++) {
+                    res_html += '<tr>';
+                    for (var j = 0; j < response.b_new[i].length; j++) {
+                      res_html += '<td>' + response.b_new[i][j] + '</td>';
+                    }
+                    res_html += '</tr>';
+
+
+                  }
+                  res_html += '<table>';
+
 
                   $('#result-bw').html(res_html);
                 }
