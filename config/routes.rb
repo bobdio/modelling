@@ -61,6 +61,12 @@ Modelling::Application.routes.draw do
     end
   end
 
+  resources :viterby, only: :index do
+    collection do
+      post :calculate
+    end
+  end
+
   get '/hmp' => 'hmps#hmp'
   root 'hmps#index'
 

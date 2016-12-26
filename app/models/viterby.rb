@@ -1,9 +1,9 @@
 class Viterby
   attr_accessor :hmm, :delta, :psi, :q
 
-  def initialize
-    @hmm = Hmm.new(4,7)
-    @hmm.build(15)
+  def initialize(model)
+    @hmm = model
+    # @hmm.build(15)
   end
 
 

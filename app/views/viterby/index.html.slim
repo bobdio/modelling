@@ -3,7 +3,7 @@
     form.fb-form.form-horizontal action="#{ hmp_path }"
       fieldset
         legend
-          = 'Алгортм Прямого-зворотнього ходу'
+          = 'Алгортм Вітербі'
         .form-group
           label for="count_hidden" class="col-sm-3"
             ="Введіть кільсть прихованих станів:"
@@ -93,8 +93,6 @@
           real_observation_html += '<input type="text" class="form-control" name="real_observations">';
           $('#real-observation').html(real_observation_html);
 
-
-
           return false;
         });
 
@@ -105,30 +103,20 @@
             var data = $('.fb-form').serialize();
             $.ajax({
               type: "POST",
-              url: '/forward_backward/calculate',
+              url: '/viterby/calculate',
               data: data,
               dataType: 'json',
               success: function (response) {
                 debugger;
-                if (response.alpha) {
-                  var res = 0.0;
-                  var res_html = 'Результат:';
+                if (response.q) {
+                  var res_html = 'Послідовність прихованих станів:';
                   res_html += '<table class="table table-striped">';
 
-                  for (var i = 0; i < response.alpha.length; i++) {
-                    res_html += '<tr>';
-                    for (var j = 0; j < response.alpha[i].length; j++){
-                      res_html += '<td>' + response.alpha[i][j] + '</td>';
-                      if (i == response.alpha.length-1) {
-                        res += response.alpha[i][j];
-                      }
-                    }
-                    res_html += '</tr>';
-
-
+                  res_html += '<tr>';
+                  for (var j = 0; j < response.q.length; j++){
+                    res_html += '<td>' + response.q[j] + '</td>';
                   }
-
-                  res_html += '<tr><td colspan="'+response.alpha[i-1].length+'">'+res+'</td></tr>';
+                  res_html += '</tr>';
 
                   res_html += '<table>';
 
@@ -139,7 +127,7 @@
             });
           }
 
-           return false;
+          return false;
         });
 
     });
