@@ -1,5 +1,5 @@
 class Hmm
-  attr_accessor :markov_condition, :num_events, :model, :emissions, :result, :series, :total
+  attr_accessor :conditions, :markov_condition, :num_events, :model, :emissions, :result, :series, :total
   def initialize(num_markov_conditions = 3, num_events = 5, initial_model = nil, emission_matrix = nil)
     @markov_condition = num_markov_conditions
     @num_events = num_events
@@ -8,8 +8,9 @@ class Hmm
     @emissions = emission_matrix || initialize_emission_matrix
   end
 
+
   def initialize_emission_matrix
-    keys = (:a..:z).to_a.take(num_events)
+    keys = @conditions || (:a..:z).to_a.take(num_events)
     # :a - червона кулька
     # :b - зелена кулька
     # :c - синя кулька
@@ -57,5 +58,28 @@ class Hmm
       end
       a += v[:probability]
     end
+  end
+
+  def create_series
+    # build if @result.empty?
+      @series = [{data: []}]
+      x = 0
+      @result.each_with_index do |e, index|
+        @series[0][:data] << {
+          x: x,
+          y: 22,
+          # z: 200,
+          name:"Ball #{e[:value]}",
+          color: e[:value],
+          fillColor: e[:value],
+          dataLabels: {
+            enabled: true,
+            color: e[:value]
+          }
+        }
+        x += 1
+        # [index,0, e[:value]]
+      end
+    # @series.pop
   end
 end

@@ -8,14 +8,14 @@
         = text_field_tag :count_hidden, @count_hidden , class: "form-control"
       .form-group
         label for="count_conditions"
-          ="Кількість станів:"
-        = text_field_tag :count_conditions, @count_conditions , class: "form-control"
+          ="Кульки:"
+        = text_field_tag :conditions, @conditions , class: "form-control", style: 'width: 300px'
       .form-group
         label for="count_values"
           ="Кількість значень:"
         = text_field_tag :count_values, @count_values , class: "form-control"
       input.btn.btn-primary type="submit" value="Модель"
-.row#data
+.row#data.hidden
   = "#{@hmp.series.to_json}"
 .row
   #container
@@ -23,15 +23,44 @@
 .row
 row
   .col-md-12
-    -@hmp.models[0..@count_hidden-1].each_with_index do |chain, i|
-      table.table.table-bordered.table-hover
-        caption
-          = "Matrix ##{i}"
-        - chain.matrix.each do |row|
-          tr
-            - row.each do |e|
-              td
-                = e
+
+    table.table.table-bordered.table-hover
+      caption
+        = 'Матриця перехідних ймовірностей (генерується автоматично)'
+      tr
+        td style='width: 150px'
+          = 'Приховані стани'
+        - @hmp.model.matrix[0].each_with_index do |_e, i|
+          td
+            = i+1
+      -@hmp.model.matrix.each_with_index do |row, index|
+        tr
+          td
+            = index + 1
+          - row.each do |e|
+            td
+              = e
+row
+  .col-md-12
+    table.table.table-bordered.table-hover
+      caption
+        = 'Емісійна матриця. Генерується автоматично по прихованим станам та можливим спостереженням'
+        br
+        = '(В дужках вказана кількість кульок відповідного кольору у відповідній урні)'
+
+      tr
+        td
+          = 'Урна/кулька'
+        -@hmp.conditions.each do |condition|
+          td
+            = condition
+      -@hmp.emissions.each_with_index do |row, index|
+        tr
+          td
+            = index+1
+          -@hmp.conditions.each do |condition|
+            td
+              = "#{row[condition][:probability].round(4)} (#{row[condition][:value]} кульок)"
 javascript:
   $(function () {
     var series = $.parseJSON($("#data").text());
