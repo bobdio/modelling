@@ -42,8 +42,6 @@ class ViterbyController < ApplicationController
 
     viterby.get
 
-    binding.pry
-
     render json: { q: viterby.q }
   end
 

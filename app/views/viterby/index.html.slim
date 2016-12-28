@@ -101,14 +101,14 @@
         .on('click', '#next-btn', function() {
 
           if ($('#emissions-matrix').html()) {
-            var data = $('.fb-form').serialize();
+            var data = $('.viterby-form').serialize();
             $.ajax({
               type: "POST",
               url: '/viterby/calculate',
               data: data,
               dataType: 'json',
               success: function (response) {
-                debugger;
+                //debugger;
                 if (response.q) {
                   var res_html = 'Послідовність прихованих станів:';
                   res_html += '<table class="table table-striped">';
